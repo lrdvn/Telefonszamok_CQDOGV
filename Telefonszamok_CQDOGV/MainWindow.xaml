@@ -1,0 +1,127 @@
+﻿<Window x:Class="Telefonszamok_CQDOGV.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Telefonkönyv"
+        Width="960" Height="540"
+        MinWidth="640" MinHeight="360"
+        WindowStartupLocation="CenterScreen"
+        SizeChanged="Window_SizeChanged"
+        mc:Ignorable="d">
+
+    <Window.Resources>
+        <!-- Gombstílus -->
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <!-- DataGrid stílus -->
+        <Style TargetType="DataGrid">
+            <Setter Property="AlternatingRowBackground" Value="LightGray"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+
+        <!-- Menüsor -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Fájl">
+                <MenuItem Header="Export személyek (CSV)" Click="ExportPersons_Click"/>
+                <MenuItem Header="Import személyek (CSV)" Click="ImportPersons_Click"/>
+                <Separator/>
+                <MenuItem Header="Export telefonszámok (CSV)" Click="ExportPhones_Click"/>
+                <MenuItem Header="Import telefonszámok (CSV)" Click="ImportPhones_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Fő tartalom -->
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3.8*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="1.2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Személyek panel -->
+            <GroupBox Header="Személyek" Grid.Column="0" Margin="5">
+                <DockPanel>
+                    <!-- Kereső -->
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,5">
+                        <Label Content="Keresés:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="tbFilter"
+                                 Width="150"
+                                 Margin="5,0,0,0"
+                                 TextChanged="tbFilter_TextChanged"/>
+                    </StackPanel>
+                    <!-- CRUD gombok -->
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,5">
+                        <Button x:Name="btnAddPerson"    Content="Új személy" Click="btnAddPerson_Click"/>
+                        <Button x:Name="btnSavePerson"   Content="Mentés"     Click="btnSavePerson_Click"/>
+                        <Button x:Name="btnDeletePerson" Content="Törlés"     Click="btnDeletePerson_Click"/>
+                    </StackPanel>
+                    <!-- Lista -->
+                    <DataGrid x:Name="dgSzemelyek"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              SelectionChanged="dgSzemelyek_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID"          Binding="{Binding id}"            IsReadOnly="True" Width="50"/>
+                            <DataGridTextColumn Header="Vezetéknév"  Binding="{Binding Vezeteknev}"                      Width="*"/>
+                            <DataGridTextColumn Header="Utónév"      Binding="{Binding Utonev}"                          Width="*"/>
+                            <DataGridTextColumn Header="Lakcím"      Binding="{Binding Lakcim}"                          Width="150"/>
+                            <DataGridComboBoxColumn x:Name="colHelyseg"
+                                                    Header="Helység"
+                                                    SelectedValueBinding="{Binding enHelysegid}"
+                                                    SelectedValuePath="id"
+                                                    DisplayMemberPath="Nev"
+                                                    Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </GroupBox>
+
+            <!-- GridSplitter -->
+            <GridSplitter Grid.Column="1"
+                          Width="5"
+                          Background="Gray"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          ShowsPreview="True"/>
+
+            <!-- Telefonszámok panel -->
+            <GroupBox Header="Telefonszámok" Grid.Column="2" Margin="5">
+                <DockPanel>
+                    <!-- Telefonszám Kereső -->
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,5">
+                        <Label Content="Keresés:" VerticalAlignment="Center"/>
+                        <TextBox x:Name="tbPhoneFilter"
+                                 Width="120"
+                                 Margin="5,0,0,0"
+                                 TextChanged="tbPhoneFilter_TextChanged"/>
+                    </StackPanel>
+                    <!-- CRUD gombok -->
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,5">
+                        <Button x:Name="btnAddPhone"  Content="Új szám" Click="btnAddPhone_Click"/>
+                        <Button x:Name="btnSavePhone" Content="Mentés"  Click="btnSavePhone_Click"/>
+                        <Button x:Name="btnDeletePhone" Content="Törlés" Click="btnDeletePhone_Click"/>
+                    </StackPanel>
+                    <!-- Telefonszám lista -->
+                    <DataGrid x:Name="dgTelefonszamok"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID"   Binding="{Binding id}"   IsReadOnly="True" Width="50"/>
+                            <DataGridTextColumn Header="Szám" Binding="{Binding Szam}"                      Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </GroupBox>
+        </Grid>
+    </DockPanel>
+</Window>
